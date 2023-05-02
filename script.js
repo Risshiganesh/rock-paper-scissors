@@ -1,3 +1,10 @@
+//Global Variables - To store values from functions (if it is inside a function, it get's re-declared everytime the function is called, so the values will not be stored.)
+let numberOfRounds;
+let playerScore;
+let computerScore;
+
+
+// Computer makes a choice
 function getComputerChoice(){
     let randomNumber = Math.floor(Math.random()*9)+1;
 
@@ -10,15 +17,18 @@ function getComputerChoice(){
     } 
 }
 
-function getPlayerSelection(){
-    let userInput = prompt("Rock, Paper or Scissors?",'');
 
+// Prompt the player to input an answer
+function getPlayerSelection(){ // This function has issues.
+    let userInput = prompt(`Rock, Paper or Scissors?
+Type "help" if you need help`,'');
     if(userInput === null||userInput === undefined){
-        return;
+        return 'endTheProgram';
     }else if (userInput === ''){
-        alert('Empty input, try again!')
-        getPlayerSelection();    
-    } else{
+        alert('Empty input, try again!');
+        return getPlayerSelection();    
+
+    } else if (typeof userInput === "string"){
         let caseInsensitive = userInput.toLowerCase();
         
         if (caseInsensitive === 'rock'){
@@ -26,23 +36,27 @@ function getPlayerSelection(){
         } else if (caseInsensitive === 'paper'){
             return 'Paper'
         } else if (caseInsensitive === 'scissors'){
-            return 'Scissors'
-    
+            return 'Scissors'   
+        } else if(caseInsensitive === 'help'){
+            help();
+            return getPlayerSelection();
         }else {
-            alert('Wrong input, Try again!')
-            getPlayerSelection();
-        }       
-    }
+            alert('Wrong input, Try again!');
+            return getPlayerSelection();
+        } 
+    
+    }else {
+        alert('Wrong input, Try again!');
+        return getPlayerSelection();
+    }   
 }
-
-
 
 
 // Algo 1
 
 function playRound(playerSelection, computerSelection){
-    console.log('You chose '+playerSelection);
-    console.log('Computer chose '+computerSelection);
+    alert(`You chose ${playerSelection}
+Computer chose ${computerSelection}`);
 
         if(playerSelection === computerSelection){
             return playerSelection+' and '+computerSelection+' is a draw!'
@@ -68,19 +82,16 @@ function playRound(playerSelection, computerSelection){
                 return computerSelection+' beats '+playerSelection+' you lose!'
             }
         }        
-    console.log(playerSelection);
-    console.log(computerSelection);
 }
 
 // let numberOfRounds works because it doesn't get redeclared, 
 //meaning, it doesn't start back from undefined, 
 //addRounds function works, then stores the values outside of it, which is let numberOfRounds.
 //If numberOfRounds was declared inside addRounds, it starts from scratch everytime.
-//But is this the best way to do it?
-let numberOfRounds;
+//But is this the best way to do it? ###Function Scope is tricky!
 
-//Paused here.
 
+// Add the number of rounds to global variable
 function addRounds(){
 
 
@@ -92,34 +103,130 @@ function addRounds(){
 };
 
 
+
+
+// Add player and computer score to global variable
+function keepScore (copyOfResult){
+
+
+    if (copyOfResult.includes('win')){
+        if (playerScore === undefined){
+            playerScore = 1;
+            if (computerScore === undefined){
+                computerScore = 0;
+            }else{
+                return;
+            }
+        }else{
+            ++playerScore;
+        }
+        
+    }else if (copyOfResult.includes('lose')){
+        if (computerScore === undefined){
+            computerScore = 1;
+            if (playerScore === undefined){
+                playerScore = 0;
+            }else{
+                return;
+            }
+        }else{
+            ++computerScore;
+        }
+        
+    }else if (copyOfResult.includes('draw')){
+        if (playerScore === undefined){
+            playerScore = 0;
+            if (computerScore === undefined){
+                computerScore = 0;
+            }
+        } else if (computerScore === undefined){
+            computerScore = 0;
+        }else {
+            return;
+        }
+
+
+    }else{
+        playerScore = 'Issue with PS';
+        computerScore = 'Issue with CS';
+    }
+
+}
+
+//Show final results
+
+function showResults(playerScorePlaceholder,computerScorePlaceholder){
+    if (playerScorePlaceholder === computerScorePlaceholder){
+        return `You scored: ${playerScorePlaceholder}
+Computer scored: ${computerScorePlaceholder}
+It's a draw`;
+    } else if (playerScorePlaceholder > computerScorePlaceholder){
+        return `You scored: ${playerScorePlaceholder}
+Computer scored: ${computerScorePlaceholder} 
+You win!`;
+    } else if (playerScorePlaceholder < computerScorePlaceholder){
+        return `You scored: ${playerScorePlaceholder}
+Computer scored: ${computerScorePlaceholder} 
+You lose!`;
+    }else{
+        return 'Something is wrong with showResults function!'
+    }
+
+}
+
+// Show current score
+function currentScore(playerScorePlaceholder,computerScorePlaceholder){
+    return `Round ${numberOfRounds} Score
+    Player: ${playerScorePlaceholder}
+    Computer: ${computerScorePlaceholder}`
+
+}
+
+
+
+// Loops the game
+
 function game(){
+
 
 let round = addRounds();
 
-alert('Round number: '+round);
     if(round<=5){
-
-
-            
-
-            let playerSelection = getPlayerSelection();
-            if (playerSelection === null||playerSelection === undefined){
+            alert(`Round number ${round} of 5`); 
+        
+            const playerSelection = getPlayerSelection();
+            if (playerSelection === 'endTheProgram'){
                 return alert("Bye!");
             } else{
-                let computerSelection = getComputerChoice();
-                console.log('Checking the computer '+computerSelection);
-                alert(playRound(playerSelection,computerSelection));
-                game();
+                const computerSelection = getComputerChoice();
+                let result = playRound(playerSelection,computerSelection);
+                alert(result);
+                keepScore(result);
+                alert(currentScore(playerScore, computerScore));
+                console.log(currentScore(playerScore, computerScore));
+                game();                
             }    
 
     }else{
-        alert('Game Over!')
+        alert(showResults(playerScore, computerScore))
+        console.log(showResults(playerScore, computerScore));
     }
 
 
     
 }
 
+
+//Displays help guide
+
+function help(){
+    alert(`Rock beats Scissors
+Paper beats Rock
+Scissors beats Paper
+Good luck!`);
+}
+
+// Initializes the game loop
 game();
 
 
