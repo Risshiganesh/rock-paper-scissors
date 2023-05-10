@@ -57,7 +57,10 @@ Type "help" if you need help`,'');
 // Algo 1
 
 function playRound(playerSelection, computerSelection){
-    alert(`You chose ${playerSelection}
+    const choices = document.querySelector('#choices');
+    choices.textContent = `You chose ${playerSelection},
+    Computer chose ${computerSelection}`;
+    console.log(`You chose ${playerSelection}
 Computer chose ${computerSelection}`);
 
         if(playerSelection === computerSelection){
@@ -65,23 +68,23 @@ Computer chose ${computerSelection}`);
         } else if (computerSelection === 'Rock'){
             let winningCondition = 'Paper';
             if (playerSelection === winningCondition){
-                return playerSelection+' beats '+computerSelection+' you win!'
+                return playerSelection+' beats '+computerSelection+', you win!'
             }else{
-                return computerSelection+' beats '+playerSelection+' you lose!'
+                return computerSelection+' beats '+playerSelection+', you lose!'
             }
         } else if (computerSelection === 'Paper'){
             let winningCondition = 'Scissors';
             if (playerSelection === winningCondition){
-                return playerSelection+' beats '+computerSelection+' you win!'
+                return playerSelection+' beats '+computerSelection+', you win!'
             }else{
-                return computerSelection+' beats '+playerSelection+' you lose!'
+                return computerSelection+' beats '+playerSelection+', you lose!'
             }
         } else if (computerSelection === 'Scissors'){
             let winningCondition = 'Rock';
             if (playerSelection === winningCondition){
-                return playerSelection+' beats '+computerSelection+' you win!'
+                return playerSelection+' beats '+computerSelection+', you win!'
             }else{
-                return computerSelection+' beats '+playerSelection+' you lose!'
+                return computerSelection+' beats '+playerSelection+', you lose!'
             }
         }        
 }
@@ -159,42 +162,34 @@ function keepScore (copyOfResult){
 
 function showResults(playerScorePlaceholder,computerScorePlaceholder){
     if (playerScorePlaceholder === computerScorePlaceholder){
-        return `You scored: ${playerScorePlaceholder}
-Computer scored: ${computerScorePlaceholder}
-It's a draw`;
+        return `Game Over, It's a draw!`;
     } else if (playerScorePlaceholder > computerScorePlaceholder){
-        return `You scored: ${playerScorePlaceholder}
-Computer scored: ${computerScorePlaceholder} 
-You win!`;
+        return `Game Over, You win!`;
     } else if (playerScorePlaceholder < computerScorePlaceholder){
-        return `You scored: ${playerScorePlaceholder}
-Computer scored: ${computerScorePlaceholder} 
-You lose!`;
+        return `Game Over, You lose!`;
     }else{
         return 'Something is wrong with showResults function!'
     }
 
 }
 
-// Show current score
-function currentScore(playerScorePlaceholder,computerScorePlaceholder){
-    return `Round ${numberOfRounds} Score
-    Player: ${playerScorePlaceholder}
-    Computer: ${computerScorePlaceholder}`
 
+
+function getPlayerScore(playerScorePlaceholder){
+    return `Player: ${playerScorePlaceholder}`;
 }
-
-
-
-
 
 
 
 function game (){
     
     if ( playerScore === 5 || computerScore === 5){
-        alert(showResults(playerScore, computerScore));
+        const finalResult = document.querySelector('#title')
+        finalResult.textContent = showResults(playerScore, computerScore);
         console.log(showResults(playerScore, computerScore));
+
+        const totalRounds = document.querySelector('#totalRounds');
+        totalRounds.textContent = `${numberOfRounds} Rounds in total`;
         return;
     } 
 
@@ -202,15 +197,34 @@ function game (){
     let round = addRounds();
     const computerSelection = getComputerChoice();
     let result = playRound(chosenElement,computerSelection);
-    alert(result);
+    
+    //Displays what you and the computer chose
+    const currentOutcome = document.querySelector("#currentResult");
+    currentOutcome.textContent = result;
+
     keepScore(result);
-    alert(currentScore(playerScore,computerScore));
+    
+    //This will be displayed at the top
+    const scoreTitle = document.querySelector('#title');
+    scoreTitle.textContent = `Round ${numberOfRounds}`;
+
+    //Player score to be updated on DOM
+    const playerScoreDOM = document.querySelector('#playerScoreDisplay');
+    playerScoreDOM.textContent = `Player: ${playerScore}`;
+    
+    //Computer score to be updated on DOM
+    const computerScoreDOM = document.querySelector('#computerScoreDisplay');
+    computerScoreDOM.textContent = `Computer: ${computerScore}`;
 
     if ( playerScore === 5 || computerScore === 5){
-        alert(showResults(playerScore, computerScore));
+        const finalResult = document.querySelector('#title')
+        finalResult.textContent = showResults(playerScore, computerScore);
         console.log(showResults(playerScore, computerScore));
+
+        const totalRounds = document.querySelector('#totalRounds');
+        totalRounds.textContent = `${numberOfRounds} Rounds in total`;
         return;
-    }
+    }  
 
 
 }
@@ -225,7 +239,8 @@ function game (){
 function playerChoice(){
 
     if ( playerScore === 5 || computerScore === 5){
-        alert(showResults(playerScore, computerScore))
+        const finalResult = document.querySelector('#finalResults')
+        finalResult.textContent = showResults(playerScore, computerScore);
         console.log(showResults(playerScore, computerScore));
 
 
@@ -256,6 +271,23 @@ function playerChoice(){
             chosenElement = 'Scissors'
             game();
         });
+
+        ////
+        const helpButton = document.querySelector('#help');
+
+        helpButton.addEventListener('click', function(){
+            choices.textContent = `Rock beats Scissors,
+            Paper beats Rock,
+            Scissors beats Paper,
+            Good luck!`;
+            
+        });
+
+        const restartButton = document.querySelector('#restart');
+        
+        restartButton.addEventListener('click', function(){
+            location.reload();
+        });
     }
     
 }
@@ -266,56 +298,7 @@ playerChoice();
 
 
 
-// Loops the game
-
-//function game(){
 
 
-//let round = addRounds();
-//
-//    if(round<=5){
-//            //alert(`Round number ${round} of 5`); 
-        
-            //const playerSelection = getPlayerSelection();
- //           const playerSelection = playerChoice();
-//            if (playerSelection === 'endTheProgram'){
-//                return alert("Bye!");
-//            } else{
-//                const computerSelection = getComputerChoice();
-//                let result = playRound(playerSelection,computerSelection);
-//                alert(result);
- //               keepScore(result);
- //               alert(currentScore(playerScore, computerScore));
-//                console.log(currentScore(playerScore, computerScore));
-//                game();                
-//            }    
-//
-//    }else{
-//        alert(showResults(playerScore, computerScore))
-//       console.log(showResults(playerScore, computerScore));
-//   }
-
-
-    
-//}
-
-
-//Displays help guide
-
-function help(){
-    alert(`Rock beats Scissors
-Paper beats Rock
-Scissors beats Paper
-Good luck!`);
-}
-
-// Initializes the game loop
-//game();
-
-///////////////////////////////
-
-
-
-////
 
 
