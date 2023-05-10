@@ -166,7 +166,7 @@ function showResults(playerScorePlaceholder,computerScorePlaceholder){
     } else if (playerScorePlaceholder > computerScorePlaceholder){
         return `Game Over, You win!`;
     } else if (playerScorePlaceholder < computerScorePlaceholder){
-        return `Game Over, You lose!`;
+        return `Game Over, Computer wins!`;
     }else{
         return 'Something is wrong with showResults function!'
     }
