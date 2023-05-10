@@ -1,7 +1,9 @@
 //Global Variables - To store values from functions (if it is inside a function, it get's re-declared everytime the function is called, so the values will not be stored.)
 let numberOfRounds;
-let playerScore;
-let computerScore;
+let playerScore = 0;
+let computerScore = 0;
+let chosenElement;
+
 
 
 // Computer makes a choice
@@ -184,37 +186,118 @@ function currentScore(playerScorePlaceholder,computerScorePlaceholder){
 
 
 
-// Loops the game
-
-function game(){
 
 
-let round = addRounds();
 
-    if(round<=5){
-            alert(`Round number ${round} of 5`); 
-        
-            const playerSelection = getPlayerSelection();
-            if (playerSelection === 'endTheProgram'){
-                return alert("Bye!");
-            } else{
-                const computerSelection = getComputerChoice();
-                let result = playRound(playerSelection,computerSelection);
-                alert(result);
-                keepScore(result);
-                alert(currentScore(playerScore, computerScore));
-                console.log(currentScore(playerScore, computerScore));
-                game();                
-            }    
 
-    }else{
-        alert(showResults(playerScore, computerScore))
+function game (){
+    
+    if ( playerScore === 5 || computerScore === 5){
+        alert(showResults(playerScore, computerScore));
         console.log(showResults(playerScore, computerScore));
+        return;
+    } 
+
+    chosenElement;
+    let round = addRounds();
+    const computerSelection = getComputerChoice();
+    let result = playRound(chosenElement,computerSelection);
+    alert(result);
+    keepScore(result);
+    alert(currentScore(playerScore,computerScore));
+
+    if ( playerScore === 5 || computerScore === 5){
+        alert(showResults(playerScore, computerScore));
+        console.log(showResults(playerScore, computerScore));
+        return;
     }
 
 
+}
+
+
+
+
+
+
+// Listens for click event on buttons and returns appropriate values
+
+function playerChoice(){
+
+    if ( playerScore === 5 || computerScore === 5){
+        alert(showResults(playerScore, computerScore))
+        console.log(showResults(playerScore, computerScore));
+
+
+
+
+    } else {
+        const rock = document.querySelector('#rock');
+
+        ////
+        rock.addEventListener('click', function (){
+            chosenElement = 'Rock'
+            game();
+        });
+
+
+        ////
+        const paper = document.querySelector('#paper');
+
+        paper.addEventListener('click', function (){
+            chosenElement = 'Paper'
+            game();
+        });
+
+        ////
+        const scissors = document.querySelector('#scissors');
+
+        scissors.addEventListener('click', function(){
+            chosenElement = 'Scissors'
+            game();
+        });
+    }
     
 }
+
+
+
+playerChoice();
+
+
+
+// Loops the game
+
+//function game(){
+
+
+//let round = addRounds();
+//
+//    if(round<=5){
+//            //alert(`Round number ${round} of 5`); 
+        
+            //const playerSelection = getPlayerSelection();
+ //           const playerSelection = playerChoice();
+//            if (playerSelection === 'endTheProgram'){
+//                return alert("Bye!");
+//            } else{
+//                const computerSelection = getComputerChoice();
+//                let result = playRound(playerSelection,computerSelection);
+//                alert(result);
+ //               keepScore(result);
+ //               alert(currentScore(playerScore, computerScore));
+//                console.log(currentScore(playerScore, computerScore));
+//                game();                
+//            }    
+//
+//    }else{
+//        alert(showResults(playerScore, computerScore))
+//       console.log(showResults(playerScore, computerScore));
+//   }
+
+
+    
+//}
 
 
 //Displays help guide
@@ -227,6 +310,12 @@ Good luck!`);
 }
 
 // Initializes the game loop
-game();
+//game();
+
+///////////////////////////////
+
+
+
+////
 
 
